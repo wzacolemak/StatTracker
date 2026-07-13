@@ -4,7 +4,7 @@
 
 Steam 创意工坊:https://steamcommunity.com/sharedfiles/filedetails/?id=3721416376
 
-English: [README-EN.md](README-EN.md)
+English Document: [README-EN.md](README-EN.md)
 
 ## 功能
 
