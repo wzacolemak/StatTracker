@@ -23,3 +23,6 @@ com/
 # OS
 Thumbs.db
 .DS_Store
+
+# 本地代理指引,不上传仓库 / local agent guidance, do not commit
+AGENTS.md
