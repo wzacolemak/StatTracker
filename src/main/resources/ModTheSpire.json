@@ -1,0 +1,10 @@
+{
+  "modid": "StatTracker",
+  "name": "Stat Tracker",
+  "author": "wzacolemak",
+  "description": "Tracks team contribution in Together in Spire - damage, debuff/buff attribution, team support stats",
+  "version": "0.1.8",
+  "sts_version": "12-22-2022",
+  "mts_version": "3.30.0",
+  "dependencies": ["basemod", "spireTogether"]
+}

@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+}
+
+group 'damagetracker'
+version '0.1.0'
+
+def stsPath = 'E:/SteamLibrary/steamapps/common/SlayTheSpire'
+def workshopPath = 'E:/SteamLibrary/steamapps/workshop/content/646570'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation files("${stsPath}/desktop-1.0.jar")
+    implementation files("${workshopPath}/1605060445/ModTheSpire.jar")
+    implementation files("${workshopPath}/1605833019/BaseMod.jar")
+    implementation files("${workshopPath}/1609158507/StSLib.jar")
+    implementation files("${workshopPath}/2384072973/TogetherInSpire.jar")
+}
+
+jar {
+    from('src/main/resources') {
+        include 'ModTheSpire.json'
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
