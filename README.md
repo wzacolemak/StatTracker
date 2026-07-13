@@ -1,25 +1,25 @@
 # Stat Tracker / 统计追踪器
 
-为 **Together in Spire**(杀戮尖塔联机 mod)做的团队贡献统计工具。实时追踪每位玩家的伤害、debuff/buff 归因和团队支援数据,带一个可拖拽的游戏内面板。
+适用于 **Together in Spire** 的《杀戮尖塔》团队贡献统计 mod。它会记录战斗中的玩家伤害、debuff 伤害归因，以及给队友提供的护盾和增益。
 
-Steam 创意工坊:https://steamcommunity.com/sharedfiles/filedetails/?id=3721416376
+Steam 创意工坊：<https://steamcommunity.com/sharedfiles/filedetails/?id=3721416376>
 
-English Document: [README-EN.md](README-EN.md)
+英文文档：<https://github.com/wzacolemak/StatTracker/blob/master/README-EN.md>
 
 ## 功能
 
-- 单人/多人伤害追踪 — 实时追踪每个玩家在战斗中造成的直接伤害
-- Debuff 伤害归因 — 易伤、中毒等 debuff 带来的额外伤害算到施放者头上
-- 团队贡献 — 追踪给队友的护盾和增益
-- 伤害占比 — 显示每个玩家占团队总伤害的百分比
-- 4 个视图 — 当前战斗 / 整局统计 / Buff 统计 / 战斗日志
-- 可拖拽面板 — 点标题区拖动调整位置
+- 记录每位玩家在当前战斗和整局游戏中的伤害
+- 将易伤、中毒等 debuff 产生的额外伤害归给施放者
+- 记录给队友提供的护盾和增益
+- 显示每位玩家对团队总伤害的贡献比例
+- 提供当前战斗、整局统计、增益统计和战斗日志四种视图
+- 支持拖动统计面板
 
 ## 快捷键
 
-| 键 | 功能 |
-|----|------|
-| F5 | 显示/隐藏面板 |
+| 按键 | 功能 |
+| --- | --- |
+| F5 | 显示或隐藏统计面板 |
 | F4 | 切换视图 |
 
 ## 依赖
@@ -30,33 +30,46 @@ English Document: [README-EN.md](README-EN.md)
 
 ## 构建
 
-mod 目标是 Java 8。本地的 JDK8、游戏目录、创意工坊目录都放在 `.env` 里(不提交到仓库)。第一次构建前先从模板复制一份:
+项目使用 Java 8 编译。构建前，复制配置模板并填写本机路径：
 
 ```bash
 cp .env.example .env
-# 然后编辑 .env,填上你自己的路径
 ```
 
-然后构建:
+`.env` 中需要配置以下路径：
+
+- `STS_JDK8`：JDK 8 根目录
+- `STS_GAME`：《杀戮尖塔》安装目录
+- `STS_WORKSHOP`：Steam 创意工坊 mod 文件目录
+
+然后运行：
 
 ```bash
 bash build.sh
 ```
 
-没配 `.env` 也能跑,脚本会回退到几个常见默认路径,但路径不对编译会报错。完整的构建和发版流程在 `AGENTS.md`(没提交到仓库,只留在本地)。
+`.env` 仅用于本地构建，不应提交到版本库。`.env.example` 是可提交的配置模板。项目也支持使用 Gradle 构建：
 
-## 伤害归因机制
+```bash
+./gradlew build
+```
 
-通过 patch `AbstractMonster.damage` / `AbstractPlayer.damage` 捕获伤害(见 `patches/DamagePatch.java`)。怎么算取决于 `DamageInfo`:
+## 伤害归因
 
-- `NORMAL` — 算攻击者的(联机里靠 P2P 身份认人)。
-- `THORNS`,owner 非空 — 闪电球、荆棘、火焰屏障、Panache(花式)、Thousand Cuts(千刀万剐):算 owner。
-- `THORNS`,owner 为 null — 调 `DamageAllEnemiesAction(null, matrix, THORNS, ...)` 的遗物/能力:冥河之烬、开信刀、水银沙漏、石历、自燃、火焰吐息、欧米茄。通过 `resolveBurnPlayer()` 算到本地玩家头上(检查他有没有对应遗物/能力)。
-- `HP_LOSS` — 中毒、扼喉之类。
-- 怪物 debuff 来源(尸爆、炸弹)— 通过 `DebuffTracker` 算到放 debuff 的那个人头上。
+伤害统计通过 `DamagePatch` 拦截游戏中的伤害事件，并根据 `DamageInfo` 归因：
 
-联机里每个客户端只算自己造成的伤害(包括自己的遗物伤害),再把战斗和回合总量通过 TIS `ExtraData`(`st_dmg`)广播给队友。远端的总量是覆盖本地估算,不是累加,所以不会重复计数。
+- `NORMAL`：归给攻击者；联机模式下通过 Together in Spire 的玩家身份识别攻击者。
+- 带有 owner 的 `THORNS`：归给伤害来源的 owner，例如闪电球、荆棘、火焰屏障、花式和千刀万剐。
+- owner 为空的 `THORNS`：处理冥河之烬、开信刀、水银沙漏、石历、自燃、火焰吐息和欧米茄等来源。
+- `HP_LOSS`：处理毒、扼喉等不属于普通攻击的生命值损失。
+- 怪物身上的尸爆和炸弹等 debuff：归给施加该 debuff 的玩家。
 
-## 许可
+联机模式下，每个客户端计算本地玩家的伤害，再通过 Together in Spire 的 ExtraData 同步战斗和回合统计。远程统计会覆盖本地缓存，不会重复累加。
 
-MIT,见 [LICENSE](LICENSE)。
+## 开发说明
+
+游戏本体和 mod 依赖不包含在仓库中。构建时会从 `.env` 指定的路径读取 `desktop-1.0.jar`、ModTheSpire、BaseMod、StSLib 和 Together in Spire。
+
+## 许可证
+
+本项目使用 MIT 许可证，详见 [LICENSE](LICENSE)。
