@@ -48,7 +48,7 @@ cp .env.example .env
 bash build.sh
 ```
 
-`.env` 仅用于本地构建，不应提交到版本库。`.env.example` 是可提交的配置模板。项目也支持使用 Gradle 构建：
+项目也支持使用 Gradle 构建：
 
 ```bash
 ./gradlew build
