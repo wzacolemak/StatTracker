@@ -30,13 +30,20 @@ English Document: [README-EN.md](README-EN.md)
 
 ## 构建
 
-mod 目标是 Java 8,用 `build.sh` 构建(脚本里写死了 JDK 和依赖 jar 的路径):
+mod 目标是 Java 8。本地的 JDK8、游戏目录、创意工坊目录都放在 `.env` 里(不提交到仓库)。第一次构建前先从模板复制一份:
+
+```bash
+cp .env.example .env
+# 然后编辑 .env,填上你自己的路径
+```
+
+然后构建:
 
 ```bash
 bash build.sh
 ```
 
-游戏本体和创意工坊依赖 jar 在 `build.gradle` / `build.sh` 里都是绝对路径。你的安装路径不一样就自己改一下。完整的构建和发版流程在 `AGENTS.md`(没提交到仓库,只留在本地)。
+没配 `.env` 也能跑,脚本会回退到几个常见默认路径,但路径不对编译会报错。完整的构建和发版流程在 `AGENTS.md`(没提交到仓库,只留在本地)。
 
 ## 伤害归因机制
 

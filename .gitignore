@@ -26,3 +26,7 @@ Thumbs.db
 
 # 本地代理指引,不上传仓库 / local agent guidance, do not commit
 AGENTS.md
+
+# 本地路径配置,不上传仓库(见 .env.example)
+# Local path config, do not commit (see .env.example)
+.env

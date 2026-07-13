@@ -30,13 +30,20 @@ Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=372141637
 
 ## Building
 
-The mod targets Java 8. Build with `build.sh` (the JDK and dependency jars are referenced inside the script):
+The mod targets Java 8. Local paths (JDK8, game dir, workshop dir) live in `.env`, which is not committed. Copy the template before your first build:
+
+```bash
+cp .env.example .env
+# then edit .env with your own paths
+```
+
+Then build:
 
 ```bash
 bash build.sh
 ```
 
-The game core and workshop dependency jars are referenced by absolute path in `build.gradle` / `build.sh`. Adjust the paths if your install is elsewhere. `AGENTS.md` (not committed; kept locally) documents the full build and release workflow.
+It works without `.env` too — the script falls back to a few common default paths, but compilation fails if they don't match. `AGENTS.md` (not committed; kept locally) documents the full build and release workflow.
 
 ## How damage attribution works
 
