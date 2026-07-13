@@ -1,0 +1,25 @@
+# Build output
+build/
+out/
+*.class
+
+# Gradle wrapper / distribution (132MB — do not commit)
+gradle-8.5-bin.zip
+gradle-dist/
+.gradle/
+gradle/caches/
+
+# Vendored ModTheSpire annotation sources (dev convenience copy)
+com/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# OS
+Thumbs.db
+.DS_Store
